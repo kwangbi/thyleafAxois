@@ -2,18 +2,23 @@ package com.yang.thyleafaxois.controller;
 
 import com.yang.thyleafaxois.dto.DataDTO;
 import com.yang.thyleafaxois.dto.UploadDTO;
+import com.yang.thyleafaxois.util.Base64Converter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.filechooser.FileSystemView;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.http.HttpRequest;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +28,7 @@ import java.util.Base64;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Base64;
 
 @Slf4j
 @Controller
@@ -35,27 +41,15 @@ public class UploadController {
         return "index";
     }
 
-    @PostMapping("/upload")
-    public String uploadFile(@RequestParam Map params) {
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public String uploadFile(@RequestBody UploadDTO dto,RedirectAttributes attributes) {
 
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        //System.out.println("getFileBase64 : " + dto.getFileBase64());
-        //System.out.println("filename : " + dto.getFilename());
-        System.out.println("getFileBase64 : " + params.toString());
+        System.out.println("dto : " + dto.toString());
 
-/*
-        Enumeration params = request.getParameterNames();
-        while(params.hasMoreElements()){
-            String name = (String)params.nextElement();
-            System.out.println("name : [" + name + "] / parameter : [" + request.getParameter(name) + "]");
-        }
-*/
+        MultipartFile file = Base64Converter.converter(dto.getFileBase64());
 
-        //log.debug(request.getParameter(""));
 
-        //log.debug("file : {}",dto.getFileBase64());
-
-        /*
 
         // check if file is empty
         if (file.isEmpty()) {
@@ -68,7 +62,7 @@ public class UploadController {
 
         // save the file on the local file system
         try {
-            Path path = Paths.get(UPLOAD_DIR + fileName);
+            Path path = Paths.get(UPLOAD_DIR + dto.getFilename());
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
@@ -77,7 +71,7 @@ public class UploadController {
         // return success response
         attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
 
-         */
+
 
         return "redirect:/";
     }

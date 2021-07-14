@@ -35,14 +35,20 @@
 
 
     function uploadFile() {
+        var fileValue = $("#fileupload").val().split("\\");
+        var fileName = fileValue[fileValue.length-1];
+
+        console.log("===> " + fileValue)
+        console.log("===> " + fileName)
+
         var file = fileupload.files[0];
 
         getBase64(file).then(
-            data => encoding64(data)
+            data => encoding64(data,fileName)
         );
     }
 
-    function encoding64(data){
+    function encoding64(data,fileName){
         console.log("1111111111111111111111111111111111");
         console.log(data);
 
@@ -50,13 +56,10 @@
 
         var formData = new FormData();
         formData.append("fileBase64", data);
-        formData.append("filename", "aaaaaaaa");
+        formData.append("filename", fileName);
 
         //var params = JSON.stringify(formData);
-        const params = {
-            fileBase64:"1111",
-            data2:"2222"
-        }
+        var params = {"fileBase64":data,"filename":fileName}
 
 
         $.ajax({
