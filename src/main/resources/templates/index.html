@@ -45,17 +45,25 @@
     function encoding64(data){
         console.log("1111111111111111111111111111111111");
         console.log(data);
+
+
+
         var formData = new FormData();
         formData.append("fileBase64", data);
         formData.append("filename", "aaaaaaaa");
 
-        var params = JSON.stringify(formData);
+        //var params = JSON.stringify(formData);
+        const params = {
+            fileBase64:"1111",
+            data2:"2222"
+        }
+
 
         $.ajax({
             url: "/upload",
-            type: "POST",
+            type: "post",
             //data: JSON.stringify(formData),
-            data: {"param1" : "aaaa","param2" : "bbbb"},
+            data: JSON.stringify(params),
             dataType:"json",
             contentType: 'application/json',
             async:false,
